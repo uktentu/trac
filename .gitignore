@@ -1,0 +1,34 @@
+# Ignore Python virtual environment
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Ignore database files in git (use cloud database in production)
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignore environment variables
+.env
+.env.local
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore node modules if you add any frontend tooling later
+node_modules/
+
+# Ignore build artifacts
+build/
+dist/
+
+# Keep these for deployment
+!.github/

@@ -1,0 +1,112 @@
+name: Deploy HabitCommit
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  # Deploy Frontend to GitHub Pages
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Create frontend build
+        run: |
+          mkdir -p build
+          # Copy frontend files
+          cp index.html build/
+          cp styles.css build/
+          cp app.js build/
+          
+          # Update API endpoint for production
+          # Replace localhost with your deployed backend URL
+          sed -i "s|http://localhost:5001/api|${{ secrets.BACKEND_URL || 'https://your-backend.railway.app/api' }}|g" build/app.js
+          
+          echo "Frontend build complete!"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './build'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Test Backend
+  test-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Initialize database
+        run: |
+          python -c "import database; database.init_database()"
+          
+      - name: Test API endpoints
+        run: |
+          # Start server in background
+          python server.py &
+          SERVER_PID=$!
+          
+          # Wait for server to start
+          sleep 5
+          
+          # Test health endpoint
+          curl -f http://localhost:5001/api/health || exit 1
+          
+          # Test habits endpoint
+          curl -f http://localhost:5001/api/habits || exit 1
+          
+          # Stop server
+          kill $SERVER_PID
+          
+          echo "✅ All API tests passed!"
+
+  # Deploy Backend to Railway (optional - requires Railway setup)
+  deploy-backend-railway:
+    runs-on: ubuntu-latest
+    needs: test-backend
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Railway
+        run: |
+          echo "To deploy to Railway:"
+          echo "1. Install Railway CLI: npm i -g @railway/cli"
+          echo "2. Run: railway login"
+          echo "3. Run: railway init"
+          echo "4. Run: railway up"
+          echo ""
+          echo "Or use Railway's GitHub integration:"
+          echo "https://railway.app/new"
