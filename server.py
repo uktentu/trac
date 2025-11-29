@@ -132,9 +132,12 @@ def health_check():
 # ============ Server Startup ============
 
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5001))
+    
     print("🚀 Starting HabitCommit API Server...")
-    print("📊 Database: habits.db")
-    print("🌐 Server: http://localhost:5001")
+    print(f"📊 Database: habits.db")
+    print(f"🌐 Server: http://0.0.0.0:{port}")
     print("📡 API Endpoints:")
     print("   - GET    /api/habits")
     print("   - POST   /api/habits")
@@ -144,4 +147,6 @@ if __name__ == '__main__':
     print("   - POST   /api/commits")
     print("\n✨ Press Ctrl+C to stop the server\n")
     
-    app.run(debug=True, port=5001)
+    # Bind to 0.0.0.0 for Railway deployment
+    app.run(host='0.0.0.0', debug=False, port=port)
+

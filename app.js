@@ -10,7 +10,8 @@ class HabitTracker {
         this.currentFilter = 'all';
         this.weeklyProgressChart = null;
         this.personalityRadarChart = null;
-        this.API_BASE = 'http://localhost:5001/api';
+        // Use production backend URL - change to localhost:5001 for local development
+        this.API_BASE = 'https://trac-production.up.railway.app/api';
         this.init();
     }
 

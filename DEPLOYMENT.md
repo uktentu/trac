@@ -18,7 +18,7 @@
    ```
 
 3. **Workflow runs automatically** and deploys to:
-   - `https://YOUR_USERNAME.github.io/trac/`
+   - `https://uktentu.github.io/trac/`
 
 #### Backend to Railway (Free Tier)
 1. **Go to [Railway.app](https://railway.app)**
@@ -33,7 +33,7 @@
    - Go to GitHub → Settings → Secrets → Actions
    - Add secret: `BACKEND_URL` = `https://your-app.railway.app/api`
    - Push again to rebuild with new URL
-
+trac.railway.internal
 ---
 
 ### Option 2: Render (All-in-One)

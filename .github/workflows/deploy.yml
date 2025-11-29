@@ -32,8 +32,8 @@ jobs:
           cp app.js build/
           
           # Update API endpoint for production
-          # Replace localhost with your deployed backend URL
-          sed -i "s|http://localhost:5001/api|${{ secrets.BACKEND_URL || 'https://your-backend.railway.app/api' }}|g" build/app.js
+          # This ensures the deployed frontend uses the Railway backend
+          sed -i "s|http://localhost:5001/api|https://trac-production.up.railway.app/api|g" build/app.js
           
           echo "Frontend build complete!"
 
