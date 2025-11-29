@@ -133,20 +133,30 @@ def health_check():
 
 if __name__ == '__main__':
     import os
-    port = int(os.environ.get('PORT', 5001))
+    import sys
     
-    print("🚀 Starting HabitCommit API Server...")
-    print(f"📊 Database: habits.db")
-    print(f"🌐 Server: http://0.0.0.0:{port}")
-    print("📡 API Endpoints:")
-    print("   - GET    /api/habits")
-    print("   - POST   /api/habits")
-    print("   - PUT    /api/habits/<id>")
-    print("   - DELETE /api/habits/<id>")
-    print("   - GET    /api/commits")
-    print("   - POST   /api/commits")
-    print("\n✨ Press Ctrl+C to stop the server\n")
-    
-    # Bind to 0.0.0.0 for Railway deployment
-    app.run(host='0.0.0.0', debug=False, port=port)
+    try:
+        port = int(os.environ.get('PORT', 5001))
+        
+        print("🚀 Starting HabitCommit API Server...")
+        print(f"📊 Database: {db.DATABASE_PATH}")
+        print(f"🌐 Server: http://0.0.0.0:{port}")
+        print(f"🐍 Python version: {sys.version}")
+        print("📡 API Endpoints:")
+        print("   - GET    /api/habits")
+        print("   - POST   /api/habits")
+        print("   - PUT    /api/habits/<id>")
+        print("   - DELETE /api/habits/<id>")
+        print("   - GET    /api/commits")
+        print("   - POST   /api/commits")
+        print("\n✨ Starting server...\n")
+        
+        # Bind to 0.0.0.0 for Railway deployment
+        app.run(host='0.0.0.0', debug=False, port=port)
+    except Exception as e:
+        print(f"❌ Error starting server: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
 

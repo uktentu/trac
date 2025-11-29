@@ -2,7 +2,8 @@ import sqlite3
 import os
 from datetime import datetime
 
-DATABASE_PATH = 'habits.db'
+# Use Railway's persistent volume if available, otherwise use local path
+DATABASE_PATH = os.environ.get('DATABASE_PATH', 'habits.db')
 
 def get_db_connection():
     """Create and return a database connection."""
